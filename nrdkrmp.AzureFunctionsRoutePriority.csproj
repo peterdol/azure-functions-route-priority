@@ -12,7 +12,7 @@
 		<Description>AzureFunctionsRoutePriority adds MVC style route priority to Azure functions.</Description>
 		<PackageReleaseNotes>A changelog is available at https://github.com/peterdol/azure-functions-route-priority/CHANGELOG.md.</PackageReleaseNotes>
 		<Authors>Peter Dol</Authors>
-		<PackageLicenseUrl>https://github.com/peterdol/azure-functions-route-priority/blob/master/LICENSE</PackageLicenseUrl>
+		<License type="expression">MIT</License>
 		<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
 		<NoPackageAnalysis>True</NoPackageAnalysis>
 		<PackageOutputPath>$(OutputDirectory)</PackageOutputPath>
