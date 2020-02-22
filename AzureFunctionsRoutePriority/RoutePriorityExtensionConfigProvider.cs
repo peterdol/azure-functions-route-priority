@@ -34,9 +34,8 @@ namespace nrdkrmp.AzureFunctionsRoutePriority
 
         public void ReorderRoutes()
         {
-            var unorderedRoutes = _router.GetRoutes();
             var routePrecedence = Comparer<Route>.Create(RouteComparison);
-            var orderedRoutes = unorderedRoutes.OrderBy(id => id, routePrecedence);
+            var orderedRoutes = _router.GetRoutes().OrderBy(id => id, routePrecedence);
             var orderedCollection = new RouteCollection();
             foreach (var route in orderedRoutes)
             {

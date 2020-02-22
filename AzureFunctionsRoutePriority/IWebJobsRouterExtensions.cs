@@ -10,25 +10,23 @@ namespace nrdkrmp.AzureFunctionsRoutePriority
     [ExcludeFromCodeCoverage]
     public static class IWebJobsRouterExtensions
     {
-        public static List<Route> GetRoutes(this IWebJobsRouter router)
+        public static IEnumerable<Route> GetRoutes(this IWebJobsRouter router)
         {
-            var type = typeof(WebJobsRouter);
-            var fields = type.GetRuntimeFields();
-            var field = fields.FirstOrDefault(f => f.Name == "_functionRoutes");
+            var routes = typeof(WebJobsRouter)
+                            .GetRuntimeFields()
+                            .FirstOrDefault(f => f.Name == "_functionRoutes");
 
-            if (field == null)
+            if (routes == null)
                 return new List<Route>();
 
-            var functionRoutes = field.GetValue(router);
-            var routeCollection = (RouteCollection)functionRoutes;
-            var routes = GetRoutes(routeCollection);
-
-            return routes;
+            var routeCollection = (RouteCollection)routes.GetValue(router);
+            return GetRoutes(routeCollection);
         }
 
-        static List<Route> GetRoutes(RouteCollection collection)
+        static IEnumerable<Route> GetRoutes(RouteCollection collection)
         {
             var routes = new List<Route>();
+
             for (var i = 0; i < collection.Count; i++)
             {
                 if (collection[i] is RouteCollection nestedCollection)
