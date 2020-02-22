@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host.Config;
 
-namespace nrdkrmp.RoutePriority
+namespace nrdkrmp.AzureFunctionsRoutePriority
 {
     [ExcludeFromCodeCoverage]
     public class RoutePriorityExtensionConfigProvider : IExtensionConfigProvider

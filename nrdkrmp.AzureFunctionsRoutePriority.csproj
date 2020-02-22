@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>nrdkrmp.AzureFunctionsRoutePriority</RootNamespace>
+    <Version>0.0.1</Version>
+    <Company>nrdkrmp</Company>
+    <!-- Properties related to NuGet packaging: -->
+		<IsPackable>True</IsPackable>
+		<PackageId>AzureFunctionsRoutePriority</PackageId>
+		<Title>AzureFunctionsRoutePriority: add route priority to Azure functions</Title>
+		<Description>AzureFunctionsRoutePriority adds MVC style route priority to Azure functions.</Description>
+		<PackageReleaseNotes>A changelog is available at https://github.com/peterdol/azure-functions-route-priority/CHANGELOG.md.</PackageReleaseNotes>
+		<Authors>Peter Dol</Authors>
+		<PackageLicenseUrl>https://github.com/peterdol/azure-functions-route-priority/blob/master/LICENSE</PackageLicenseUrl>
+		<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+		<NoPackageAnalysis>True</NoPackageAnalysis>
+		<PackageOutputPath>$(OutputDirectory)</PackageOutputPath>
+		<PackageTags>azurefunctions;azure;functions;routing</PackageTags>
+		<RepositoryUrl>https://github.com/peterdol/azure-functions-route-priority</RepositoryUrl>
+		<IncludeSymbols>True</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+      <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Http" Version="3.0.2" />
+  </ItemGroup>
+</Project>

@@ -5,7 +5,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 
-namespace nrdkrmp.RoutePriority
+namespace nrdkrmp.AzureFunctionsRoutePriority
 {
     [ExcludeFromCodeCoverage]
     public static class IWebJobsRouterExtensions

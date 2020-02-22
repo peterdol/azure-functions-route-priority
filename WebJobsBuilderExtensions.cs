@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Azure.WebJobs;
 
-namespace nrdkrmp.RoutePriority
+namespace nrdkrmp.AzureFunctionsRoutePriority
 {
     public static class WebJobsBuilderExtensions
     {
