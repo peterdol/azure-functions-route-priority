@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>nrdkrmp.AzureFunctionsRoutePriority.Tests</RootNamespace>
     <IsPackable>false</IsPackable>
-    <IsTestProject>true<IsTestProject>
+    <IsTestProject>true</IsTestProject>
   </PropertyGroup>
 
   <ItemGroup>
