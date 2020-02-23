@@ -3,7 +3,9 @@ When a default function app starts up, the functions runtime locates all functio
 
 * A literal wins over a parameter in precedence.
 * For literals with different values (case insensitive) we choose the lexical order
-* For parameters with different numbers of constraints, the one with more wins 
+* For parameters with different numbers of constraints, the one with more wins
+
+The package is based upon the work by https://briandunnington.github.io/azure_functions_route_priority
 
 ## Usage
 
