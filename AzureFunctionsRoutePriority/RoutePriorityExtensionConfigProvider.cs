@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Routing;
@@ -9,7 +8,6 @@ using Microsoft.Azure.WebJobs.Host.Config;
 
 namespace nrdkrmp.AzureFunctionsRoutePriority
 {
-    [ExcludeFromCodeCoverage]
     public class RoutePriorityExtensionConfigProvider : IExtensionConfigProvider
     {
         readonly IApplicationLifetime _applicationLifetime;

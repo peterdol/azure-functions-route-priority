@@ -12,7 +12,6 @@ namespace nrdkrmp.AzureFunctionsRoutePriority
                 throw new System.ArgumentNullException(nameof(builder));
 
             builder.AddExtension<RoutePriorityExtensionConfigProvider>();
-
             return builder;
         }
     }

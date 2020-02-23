@@ -1,10 +1,7 @@
-
-using System.Linq;
 using Xunit;
 using AutoFixture;
 using AutoFixture.AutoNSubstitute;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using NSubstitute;
 using Moq;
 using Microsoft.AspNetCore.Routing;
 

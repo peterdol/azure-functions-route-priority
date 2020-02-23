@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -7,7 +6,6 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 
 namespace nrdkrmp.AzureFunctionsRoutePriority
 {
-    [ExcludeFromCodeCoverage]
     public static class IWebJobsRouterExtensions
     {
         public static IEnumerable<Route> GetRoutes(this IWebJobsRouter router)
