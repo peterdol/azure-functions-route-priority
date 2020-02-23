@@ -1,5 +1,9 @@
 # azure-functions-route-priority
-An extension to add MVC .NET core like route priority to Azure Functions 
+When a default function app starts up, the functions runtime locates all functions and then registers the routes for each of them. After this, routes are simply matched in the order that they are registered. This nuget package adds MVC like route priority to the Azure functions runtime:  
+
+* A literal wins over a parameter in precedence.
+* For literals with different values (case insensitive) we choose the lexical order
+* For parameters with different numbers of constraints, the one with more wins 
 
 ## Usage
 
