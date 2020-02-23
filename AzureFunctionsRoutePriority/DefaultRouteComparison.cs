@@ -1,49 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.Azure.WebJobs.Host.Config;
 
 namespace nrdkrmp.AzureFunctionsRoutePriority
 {
-    public class RoutePriorityExtensionConfigProvider : IExtensionConfigProvider
+    public class DefaultRouteComparison
     {
-        readonly IApplicationLifetime _applicationLifetime;
-        readonly IWebJobsRouter _router;
-
-        public RoutePriorityExtensionConfigProvider(IApplicationLifetime applicationLifetime, IWebJobsRouter router)
-        {
-            _applicationLifetime = applicationLifetime;
-            _router = router;
-
-            _applicationLifetime.ApplicationStarted.Register(() =>
-            {
-                ReorderRoutes();
-            });
-        }
-
-        public void Initialize(ExtensionConfigContext context)
-        {
-            if (context is null)
-                throw new ArgumentNullException(nameof(context));
-        }
-
-        public void ReorderRoutes()
-        {
-            var routePrecedence = Comparer<Route>.Create(RouteComparison);
-            var orderedRoutes = _router.GetRoutes().OrderBy(id => id, routePrecedence);
-            var orderedCollection = new RouteCollection();
-            foreach (var route in orderedRoutes)
-            {
-                orderedCollection.Add(route);
-            }
-            _router.ClearRoutes();
-            _router.AddFunctionRoutes(orderedCollection, null);
-        }
-
-        public static int RouteComparison(Route x, Route y)
+        public static int LiteralsFirst(Route x, Route y)
         {
             var xTemplate = x.ParsedTemplate;
             var yTemplate = y.ParsedTemplate;
