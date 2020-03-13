@@ -21,6 +21,15 @@ namespace nrdkrmp.AzureFunctionsRoutePriority
             return GetRoutes(routeCollection);
         }
 
+        public static RouteCollection GetProxyRoutes(this IWebJobsRouter router)
+        {
+            var routes = typeof(WebJobsRouter)
+                            .GetRuntimeFields()
+                            .FirstOrDefault(f => f.Name == "_proxyRoutes");
+
+            return (RouteCollection)routes.GetValue(router);
+        }
+
         static IEnumerable<Route> GetRoutes(RouteCollection collection)
         {
             var routes = new List<Route>();

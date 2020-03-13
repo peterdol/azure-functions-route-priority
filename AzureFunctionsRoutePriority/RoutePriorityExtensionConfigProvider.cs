@@ -40,7 +40,7 @@ namespace nrdkrmp.AzureFunctionsRoutePriority
                 orderedCollection.Add(route);
             }
             _router.ClearRoutes();
-            _router.AddFunctionRoutes(orderedCollection, null);
+            _router.AddFunctionRoutes(orderedCollection, _router.GetProxyRoutes());
         }
 
         public static int RouteComparison(Route x, Route y)
