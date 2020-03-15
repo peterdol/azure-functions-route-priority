@@ -1,11 +1,13 @@
 # azure-functions-route-priority
-When a default function app starts up, the functions runtime locates all functions and then registers the routes for each of them. After this, routes are simply matched in the order that they are registered. This nuget package adds MVC like route priority to the Azure functions runtime:  
+When a default function app starts up, the functions runtime locates all functions and then registers the routes for each of them. After this, routes are simply matched in the order that they are registered. This nuget package adds MVC like route priority to the Azure functions runtime with the following default priority rule
 
 * A literal wins over a parameter in precedence.
 * For literals with different values (case insensitive) lexical order applies
 * For parameters with different numbers of constraints, the one with more constraints wins
 
-The package is inspired by this blog post https://briandunnington.github.io/azure_functions_route_priority.
+A custom priority rule can be specified in the startup.cs. Proxy routes are supported since version 1.1.1.
+
+The package is inspired by this blog post https://briandunnington.github.io/azure_functions_route_priority. 
 
 ## Usage
 
@@ -28,4 +30,20 @@ You can also use your own Route comparison by passing a custom Route Comparison 
             );
         }
 ```
+## AzureFunctionsRoutePriority Changelog
 
+All notable changes to this project will be documented in this file.
+
+The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
+
+### 1.1.1
+
+* Added support for proxy routes.
+
+### 1.0.0
+
+* Added route priority options and unit tests.
+
+### 0.0.1
+
+* Initial release, initial documentation.
