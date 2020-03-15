@@ -1,0 +1,15 @@
+{
+  "proxies": {
+    "getChange": {
+      "debug": true,
+      "matchCondition": {
+        "methods": ["GET"],
+        "route": "/assignments"
+      },
+      "backendUri": "https://postb.in/1584194584264-6953919241204",
+      "requestOverrides": {
+        "backend.request.headers.rabobank-apikey": "a9a5c0c3-cef9-49a2-b86a-2ff7d9cacb33"
+      }
+    }
+  }
+}

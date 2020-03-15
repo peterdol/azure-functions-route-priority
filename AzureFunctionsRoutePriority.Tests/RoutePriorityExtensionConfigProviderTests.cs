@@ -7,6 +7,7 @@ using Moq;
 using Microsoft.AspNetCore.Routing;
 using NSubstitute;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Options;
 
 namespace nrdkrmp.AzureFunctionsRoutePriority.Tests
 {
@@ -15,6 +16,7 @@ namespace nrdkrmp.AzureFunctionsRoutePriority.Tests
         [Fact]
         public void CanOrderRoutes()
         {
+            // arrange
             var fixture = new Fixture();
             fixture.Customize(new AutoNSubstituteCustomization());
 
@@ -29,10 +31,16 @@ namespace nrdkrmp.AzureFunctionsRoutePriority.Tests
             builder.MapFunctionRoute("testfunction3", "test/abc", "testfunction3");
             router.AddFunctionRoutes(builder.Build(), null);
 
-            var provider = new RoutePriorityExtensionConfigProvider(Substitute.For<IApplicationLifetime>(), router);
+            var optionsMonitor = new Mock<IOptionsMonitor<RoutePriorityOptions>>();
+            optionsMonitor.SetupGet(x => x.CurrentValue).Returns(new RoutePriorityOptions { Comparison = DefaultRouteComparison.LiteralsFirst });
+
+            // act
+            var provider = new RoutePriorityExtensionConfigProvider(Substitute.For<IApplicationLifetime>(), router, optionsMonitor.Object);
             provider.ReorderRoutes();
 
-            var routes = router.GetRoutes().ToList();
+            var routes = router.GetFunctionRoutes().ToEnumerable().ToArray();
+
+            // assert
             Assert.Equal("testfunction3", routes[0].Name);
             Assert.Equal("testfunction2", routes[1].Name);
             Assert.Equal("testfunction1", routes[2].Name);

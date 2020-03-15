@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Routing;
@@ -8,43 +7,22 @@ namespace nrdkrmp.AzureFunctionsRoutePriority
 {
     public static class IWebJobsRouterExtensions
     {
-        public static IEnumerable<Route> GetRoutes(this IWebJobsRouter router)
+        public static RouteCollection GetFunctionRoutes(this IWebJobsRouter router) =>
+             GetRouteCollection(router, "_functionRoutes");
+
+        public static RouteCollection GetProxyRoutes(this IWebJobsRouter router) =>
+             GetRouteCollection(router, "_proxyRoutes");
+
+        private static RouteCollection GetRouteCollection(IWebJobsRouter router, string fieldName)
         {
             var routes = typeof(WebJobsRouter)
-                            .GetRuntimeFields()
-                            .FirstOrDefault(f => f.Name == "_functionRoutes");
+                .GetRuntimeFields()
+                .FirstOrDefault(f => f.Name == fieldName);
 
             if (routes == null)
-                return new List<Route>();
-
-            var routeCollection = (RouteCollection)routes.GetValue(router);
-            return GetRoutes(routeCollection);
-        }
-
-        public static RouteCollection GetProxyRoutes(this IWebJobsRouter router)
-        {
-            var routes = typeof(WebJobsRouter)
-                            .GetRuntimeFields()
-                            .FirstOrDefault(f => f.Name == "_proxyRoutes");
+                return new RouteCollection();
 
             return (RouteCollection)routes.GetValue(router);
-        }
-
-        static IEnumerable<Route> GetRoutes(RouteCollection collection)
-        {
-            var routes = new List<Route>();
-
-            for (var i = 0; i < collection.Count; i++)
-            {
-                if (collection[i] is RouteCollection nestedCollection)
-                {
-                    routes.AddRange(GetRoutes(nestedCollection));
-                    continue;
-                }
-                routes.Add((Route)collection[i]);
-            }
-
-            return routes;
         }
     }
 }

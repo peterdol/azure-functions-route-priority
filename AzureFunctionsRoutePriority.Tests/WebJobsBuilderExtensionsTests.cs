@@ -1,5 +1,3 @@
-using System.IO.Compression;
-using System.Runtime.CompilerServices;
 using Xunit;
 using AutoFixture;
 using AutoFixture.AutoNSubstitute;
@@ -12,6 +10,7 @@ using Microsoft.Azure.WebJobs.Host.Config;
 using NSubstitute;
 using Microsoft.AspNetCore.Hosting;
 using System.Linq;
+using Microsoft.Extensions.Options;
 
 namespace nrdkrmp.AzureFunctionsRoutePriority.Tests
 {
@@ -20,6 +19,7 @@ namespace nrdkrmp.AzureFunctionsRoutePriority.Tests
         [Fact]
         public void CanConfigureDefaultRoutePriority()
         {
+            // arrange
             var fixture = new Fixture();
             fixture.Customize(new AutoNSubstituteCustomization());
 
@@ -35,6 +35,11 @@ namespace nrdkrmp.AzureFunctionsRoutePriority.Tests
             var services = new ServiceCollection();
             services.AddSingleton(Substitute.For<IApplicationLifetime>());
             services.AddSingleton(router);
+            services.AddSingleton(new RoutePriorityOptions { Comparison = DefaultRouteComparison.LiteralsFirst });
+
+            var optionsMonitor = new Mock<IOptionsMonitor<RoutePriorityOptions>>();
+            optionsMonitor.SetupGet(x => x.CurrentValue).Returns(new RoutePriorityOptions { Comparison = DefaultRouteComparison.LiteralsFirst });
+            services.AddSingleton(optionsMonitor.Object);
 
             var mockBuilder = new Mock<IWebJobsBuilder>();
             mockBuilder.SetupGet(x => x.Services).Returns(services).Verifiable();
@@ -45,13 +50,14 @@ namespace nrdkrmp.AzureFunctionsRoutePriority.Tests
             routePriorityExtension.ReorderRoutes();
 
             // assert
-            var routes = router.GetRoutes();
+            var routes = router.GetFunctionRoutes().ToEnumerable();
             Assert.Equal("testfunction2", routes.First().Name);
         }
 
         [Fact]
         public void CanOverrideDefaultRoutePriority()
         {
+            // arrange
             var fixture = new Fixture();
             fixture.Customize(new AutoNSubstituteCustomization());
 
@@ -61,12 +67,17 @@ namespace nrdkrmp.AzureFunctionsRoutePriority.Tests
 
             var builder = router.CreateBuilder(handler.Object, "api");
             builder.MapFunctionRoute("testfunction1", "test/{token}", "testfunction1");
-            builder.MapFunctionRoute("testfunction2", "test/xxxxxxxxxx", "testfunction2");
+            builder.MapFunctionRoute("testfunction2", "test/xxxx", "testfunction2");
             router.AddFunctionRoutes(builder.Build(), null);
 
             var services = new ServiceCollection();
             services.AddSingleton(Substitute.For<IApplicationLifetime>());
             services.AddSingleton(router);
+            services.AddSingleton(new RoutePriorityOptions { Comparison = DefaultRouteComparison.LiteralsFirst });
+
+            var optionsMonitor = new Mock<IOptionsMonitor<RoutePriorityOptions>>();
+            optionsMonitor.SetupGet(x => x.CurrentValue).Returns(new RoutePriorityOptions { Comparison = (Route x, Route y) => x.RouteTemplate.Length.CompareTo(y.RouteTemplate.Length) });
+            services.AddSingleton(optionsMonitor.Object);
 
             var mockBuilder = new Mock<IWebJobsBuilder>();
             mockBuilder.SetupGet(x => x.Services).Returns(services).Verifiable();
@@ -79,13 +90,14 @@ namespace nrdkrmp.AzureFunctionsRoutePriority.Tests
             routePriorityExtension.ReorderRoutes();
 
             // assert
-            var routes = router.GetRoutes();
+            var routes = router.GetFunctionRoutes().ToEnumerable();
             Assert.Equal("testfunction2", routes.First().Name);
         }
 
         [Fact]
         public void DoesNotClearProxyRoutes()
         {
+            // arrange
             var fixture = new Fixture();
             fixture.Customize(new AutoNSubstituteCustomization());
 
@@ -98,13 +110,19 @@ namespace nrdkrmp.AzureFunctionsRoutePriority.Tests
             builder.MapFunctionRoute("testfunction2", "test/xxxxxxxxxx", "testfunction2");
 
             var proxyBuilder = router.CreateBuilder(handler.Object, "proxy");
-            proxyBuilder.MapFunctionRoute("proxy1", "dummy", null);
+            proxyBuilder.MapFunctionRoute("proxy1", "proxy/{id}", null);
+            proxyBuilder.MapFunctionRoute("proxy2", "proxy/dummy", null);
 
             router.AddFunctionRoutes(builder.Build(), proxyBuilder.Build());
 
             var services = new ServiceCollection();
             services.AddSingleton(Substitute.For<IApplicationLifetime>());
             services.AddSingleton(router);
+            services.AddSingleton(new RoutePriorityOptions { Comparison = DefaultRouteComparison.LiteralsFirst });
+
+            var optionsMonitor = new Mock<IOptionsMonitor<RoutePriorityOptions>>();
+            optionsMonitor.SetupGet(x => x.CurrentValue).Returns(new RoutePriorityOptions { Comparison = DefaultRouteComparison.LiteralsFirst });
+            services.AddSingleton(optionsMonitor.Object);
 
             var mockBuilder = new Mock<IWebJobsBuilder>();
             mockBuilder.SetupGet(x => x.Services).Returns(services).Verifiable();
@@ -117,8 +135,8 @@ namespace nrdkrmp.AzureFunctionsRoutePriority.Tests
             routePriorityExtension.ReorderRoutes();
 
             // assert
-            var routes = router.GetProxyRoutes();
-            Assert.Equal(1, routes.Count);
+            var routes = router.GetProxyRoutes().ToEnumerable();
+            Assert.Equal("proxy2", routes.First().Name);
         }
     }
 }

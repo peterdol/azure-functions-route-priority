@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host.Config;
+using Microsoft.Extensions.Options;
 
 namespace nrdkrmp.AzureFunctionsRoutePriority
 {
@@ -12,12 +13,13 @@ namespace nrdkrmp.AzureFunctionsRoutePriority
     {
         readonly IApplicationLifetime _applicationLifetime;
         readonly IWebJobsRouter _router;
+        private readonly RoutePriorityOptions _options;
 
-        public RoutePriorityExtensionConfigProvider(IApplicationLifetime applicationLifetime, IWebJobsRouter router)
+        public RoutePriorityExtensionConfigProvider(IApplicationLifetime applicationLifetime, IWebJobsRouter router, IOptionsMonitor<RoutePriorityOptions> optionsMonitor)
         {
             _applicationLifetime = applicationLifetime;
             _router = router;
-
+            _options = optionsMonitor.CurrentValue;
             _applicationLifetime.ApplicationStarted.Register(() =>
             {
                 ReorderRoutes();
@@ -32,59 +34,20 @@ namespace nrdkrmp.AzureFunctionsRoutePriority
 
         public void ReorderRoutes()
         {
-            var routePrecedence = Comparer<Route>.Create(RouteComparison);
-            var orderedRoutes = _router.GetRoutes().OrderBy(id => id, routePrecedence);
-            var orderedCollection = new RouteCollection();
-            foreach (var route in orderedRoutes)
-            {
-                orderedCollection.Add(route);
-            }
+            var routePrecedence = Comparer<Route>.Create(_options.Comparison);
+
+            var functionRoutes = _router.GetFunctionRoutes()
+                                        .ToEnumerable()
+                                        .OrderBy(id => id, routePrecedence)
+                                        .ToRouteCollection();
+
+            var proxyRoutes = _router.GetProxyRoutes()
+                                     .ToEnumerable()
+                                     .OrderBy(id => id, routePrecedence)
+                                     .ToRouteCollection();
+
             _router.ClearRoutes();
-            _router.AddFunctionRoutes(orderedCollection, _router.GetProxyRoutes());
-        }
-
-        public static int RouteComparison(Route x, Route y)
-        {
-            var xTemplate = x.ParsedTemplate;
-            var yTemplate = y.ParsedTemplate;
-
-            for (var i = 0; i < xTemplate.Segments.Count; i++)
-            {
-                if (yTemplate.Segments.Count <= i)
-                    return -1;
-
-                var xSegment = xTemplate.Segments[i].Parts[0];
-                var ySegment = yTemplate.Segments[i].Parts[0];
-
-                if (!xSegment.IsParameter && ySegment.IsParameter)
-                    return -1;
-
-                if (xSegment.IsParameter && !ySegment.IsParameter)
-                    return 1;
-
-                if (xSegment.IsParameter)
-                {
-                    if (xSegment.InlineConstraints.Count() > ySegment.InlineConstraints.Count())
-                    {
-                        return -1;
-                    }
-                    else if (xSegment.InlineConstraints.Count() < ySegment.InlineConstraints.Count())
-                    {
-                        return 1;
-                    }
-                }
-                else
-                {
-                    var comparison = string.Compare(xSegment.Text, ySegment.Text, StringComparison.OrdinalIgnoreCase);
-                    if (comparison != 0)
-                        return comparison;
-                }
-            }
-
-            if (yTemplate.Segments.Count > xTemplate.Segments.Count)
-                return 1;
-
-            return 0;
+            _router.AddFunctionRoutes(functionRoutes, proxyRoutes);
         }
     }
 }

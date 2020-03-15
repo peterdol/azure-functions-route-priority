@@ -1,7 +1,7 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 
 namespace nrdkrmp.AzureFunctionsRoutePriority
 {
@@ -13,10 +13,11 @@ namespace nrdkrmp.AzureFunctionsRoutePriority
                 throw new ArgumentNullException(nameof(builder));
 
             builder.AddExtension<RoutePriorityExtensionConfigProvider>()
-            .ConfigureOptions<RoutePriorityOptions>((config, path, options) =>
-            {
-                options.Comparison = DefaultRouteComparison.LiteralsFirst;
-            });
+                   .ConfigureOptions<RoutePriorityOptions>((config, options) =>
+                    {
+                        config.Bind(options);
+                        options.Comparison = DefaultRouteComparison.LiteralsFirst;
+                    });
 
             return builder;
         }

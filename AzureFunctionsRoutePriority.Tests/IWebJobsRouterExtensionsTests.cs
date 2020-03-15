@@ -12,19 +12,22 @@ namespace nrdkrmp.AzureFunctionsRoutePriority.Tests
         [Fact]
         public void CanGetRoutes()
         {
+            // arrange
             var fixture = new Fixture();
             fixture.Customize(new AutoNSubstituteCustomization());
 
             var constraintResolver = new Mock<IInlineConstraintResolver>();
             var handler = new Mock<IWebJobsRouteHandler>();
-            IWebJobsRouter router = new WebJobsRouter(constraintResolver.Object);
+            var router = new WebJobsRouter(constraintResolver.Object);
 
             var builder = router.CreateBuilder(handler.Object, "api");
             builder.MapFunctionRoute("testfunction", "test/{token}", "testfunction");
             router.AddFunctionRoutes(builder.Build(), null);
 
-            var routes = router.GetRoutes();
+            // act
+            var routes = router.GetFunctionRoutes().ToEnumerable();
 
+            // assert
             Assert.Single(routes);
         }
     }

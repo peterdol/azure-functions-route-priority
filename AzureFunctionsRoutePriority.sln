@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureFunctionsRoutePriority
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureFunctionsRoutePriority.Tests", "AzureFunctionsRoutePriority.Tests\AzureFunctionsRoutePriority.Tests.csproj", "{22AF5787-CCD7-4A17-A90B-908641833174}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "proxy", "AzureFunctionsRoutePriority.SampleProxy\AzureFunctionsRoutePriority.SampleProxy.csproj", "{101692E0-3522-4093-9757-1FF1DB6A517E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,5 +46,17 @@ Global
 		{22AF5787-CCD7-4A17-A90B-908641833174}.Release|x64.Build.0 = Release|Any CPU
 		{22AF5787-CCD7-4A17-A90B-908641833174}.Release|x86.ActiveCfg = Release|Any CPU
 		{22AF5787-CCD7-4A17-A90B-908641833174}.Release|x86.Build.0 = Release|Any CPU
+		{101692E0-3522-4093-9757-1FF1DB6A517E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{101692E0-3522-4093-9757-1FF1DB6A517E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{101692E0-3522-4093-9757-1FF1DB6A517E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{101692E0-3522-4093-9757-1FF1DB6A517E}.Debug|x64.Build.0 = Debug|Any CPU
+		{101692E0-3522-4093-9757-1FF1DB6A517E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{101692E0-3522-4093-9757-1FF1DB6A517E}.Debug|x86.Build.0 = Debug|Any CPU
+		{101692E0-3522-4093-9757-1FF1DB6A517E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{101692E0-3522-4093-9757-1FF1DB6A517E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{101692E0-3522-4093-9757-1FF1DB6A517E}.Release|x64.ActiveCfg = Release|Any CPU
+		{101692E0-3522-4093-9757-1FF1DB6A517E}.Release|x64.Build.0 = Release|Any CPU
+		{101692E0-3522-4093-9757-1FF1DB6A517E}.Release|x86.ActiveCfg = Release|Any CPU
+		{101692E0-3522-4093-9757-1FF1DB6A517E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
