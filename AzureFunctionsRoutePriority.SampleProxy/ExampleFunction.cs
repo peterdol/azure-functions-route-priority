@@ -23,7 +23,7 @@ namespace nrdkrmp.AzureFunctionsRoutePriority.SampleProxy
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
+            name ??= data?.name;
 
             return name != null
                 ? (ActionResult)new OkObjectResult($"Hello, {name}")

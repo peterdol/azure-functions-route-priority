@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>nrdkrmp.AzureFunctionsRoutePriority</RootNamespace>
-    <Version>1.1.1</Version>
+    <Version>1.2.0</Version>
     <Company>nrdkrmp</Company>
     <!-- Properties related to NuGet packaging: -->
 		<IsPackable>True</IsPackable>
@@ -24,5 +24,6 @@
 
   <ItemGroup>
       <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Http" Version="3.*" />
+	  <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
   </ItemGroup>
 </Project>
