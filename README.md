@@ -32,6 +32,9 @@ You can also use your own Route comparison by passing a custom Route Comparison 
 ```
 ## AzureFunctionsRoutePriority Changelog
 
+## 1.2.0
+
+* Added support for FunctionsHostBuilder.
 ### 1.1.1
 
 * Added support for proxy routes.
